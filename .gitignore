@@ -1,3 +1,13 @@
+/.DS_Store
+/Microservices/.DS_Store
+/Microservices/ControllerMS/.classpath
+/Microservices/DataMS/.classpath
+/Microservices/EvaluationMS/.classpath
+/Microservices/ModeleMS/.classpath
+/Microservices/UserInterfaceMS/.classpath
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
