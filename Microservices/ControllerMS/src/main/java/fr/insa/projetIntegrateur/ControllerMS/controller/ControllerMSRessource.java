@@ -12,6 +12,23 @@ import fr.insa.projetIntegrateur.ControllerMS.model.*;
 @RequestMapping("/controller")
 public class ControllerMSRessource {
 	
+	@GetMapping("/train/{nbImg}")
+	public String train(@PathVariable("nbImg") int nbImg){
+		// Result initialized with "failed" but will contain the class of the image given with "id".  
+		String output = "Failed";
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		// Get the right URL to the right image.
+		DataSet murl = restTemplate.getForObject("http://localhost:8082/data/train/" + nbImg, DataSet.class);
+		String url = murl.getUrl();
+		// Prediction with Python script.
+		Results res = restTemplate.getForObject("http://localhost:8084/evaluation/saveResults", Results.class);
+		output = res.getResult();
+		
+		return output;
+	}
+	
 	@GetMapping("/pred/{img}")
 	public String getPrediction(@PathVariable("img") int img){
 		// Result initialized with "failed" but will contain the class of the image given with "id".  
@@ -24,11 +41,13 @@ public class ControllerMSRessource {
 		//Prediction pred = new Prediction();
 		
 		// Get the right URL to the right image.
-		MinioURL murl = restTemplate.getForObject("http://localhost:8082/getURL/"+img, MinioURL.class);
+		Image murl = restTemplate.getForObject("http://localhost:8082/data/prediction/" + img, Image.class);
 		String url = murl.getUrl();
 		// Prediction with Python script.
-		Prediction pred = restTemplate.getForObject("http://localhost:8083/prediction/"+url, Prediction.class);
+		Prediction pred = restTemplate.getForObject("http://localhost:8083/prediction/" + url, Prediction.class);
 		output = pred.getResult();
+		
+		return output;
 		
 		/*
 		int i = 0;
@@ -44,8 +63,6 @@ public class ControllerMSRessource {
 			i++;
 		}
 		*/
-		
-		return output;
 	}
 
 }

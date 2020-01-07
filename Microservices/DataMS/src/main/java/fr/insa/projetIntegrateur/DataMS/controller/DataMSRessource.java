@@ -1,5 +1,6 @@
 package fr.insa.projetIntegrateur.DataMS.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,16 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.insa.projetIntegrateur.DataMS.model.*;
 
 @RestController
-@RequestMapping("/getURL")
+@RequestMapping("/data")
 public class DataMSRessource {
 	
-	@GetMapping("/{id}")
-	public MinioURL getURL(@PathVariable("id") int id){
-		MinioURL murl = new MinioURL();
-		murl.linkWithMinio(id);
+	@GetMapping(value = "/train/{nbImg}", produces=MediaType.APPLICATION_JSON_VALUE) 
+	public DataSet getDataSet(@PathVariable("nbImg") int nbImg){
+		DataSet murl = new DataSet();
+		murl.getDataSet(nbImg);
 		return murl;
 	}
 	
+	@GetMapping(value="/predict/{img}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Image getImage(@PathVariable("img") int img){
+		Image murl = new Image();
+		murl.getImage(img);
+		return murl;
+	}
 	
 	/*
 	@GetMapping("images")
