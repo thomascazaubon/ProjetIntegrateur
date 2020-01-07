@@ -16,7 +16,8 @@ public class MinioURL {
 	
 	// Methods
 	public void linkWithMinio(int id) {
-		 // Get the URL of a random image or same image every time.
+		// Get the URL of a random image or same image every time.
+		
 		
 		// Depending on the ID, get the according URL. For now it's just a generic string.
 		url = "http://urlImageTest";
