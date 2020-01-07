@@ -1,30 +1,45 @@
 package fr.insa.projetIntegrateur.EvaluationMS.controller;
 
 import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.insa.projetIntegrateur.EvaluationMS.model.ImageInfos;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import fr.insa.projetIntegrateur.EvaluationMS.model.Results;
 	
 @RestController
-@RequestMapping("/info")
+@RequestMapping("/evaluation")
 public class EvaluationMSRessource {
 	
-	@GetMapping("/{id}")
-	public ImageInfos getIDImages(@PathVariable("id") int id){
-			
-		List<ImageInfos> listInfos = Arrays.asList(
-				new ImageInfos(0,"Carotte"),
-				new ImageInfos(1,"Pain"),
-				new ImageInfos(2,"Rideaux"),
-				new ImageInfos(3, "Fraise")
-				);
+	@GetMapping(value="/saveResults", consumes=MediaType.APPLICATION_JSON_VALUE)
+	public void saveResults(Results resultsToSave) {
+		resultsToSave.print();
 		
-		return listInfos.get(id);
+		ObjectMapper mapper = new ObjectMapper();
+		String json = null;
+		try {
+			json = mapper.writeValueAsString(resultsToSave);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		FileWriter fileToSave = null;
+		try {
+			fileToSave = new FileWriter("./"+resultsToSave.getAlgorithm()+java.time.Clock.systemUTC().instant()+".json");
+			fileToSave.append(json);
+			fileToSave.flush();
+			fileToSave.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
