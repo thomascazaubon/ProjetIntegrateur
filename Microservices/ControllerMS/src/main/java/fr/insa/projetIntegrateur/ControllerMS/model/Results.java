@@ -52,6 +52,5 @@ public class Results {
 	public void setPredicted_classes(ArrayList<String> predicted_classes) {
 		this.predicted_classes = predicted_classes;
 	}
-	
-	
+
 }

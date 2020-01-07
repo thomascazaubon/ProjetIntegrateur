@@ -2,24 +2,22 @@ package fr.insa.projetIntegrateur.DataMS.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "Image")
-public class MinioURL {
+@XmlRootElement(name = "DataSet")
+public class DataSet {
 	// Attributes
 	private String url;
 	
 	// Constructors
-	public MinioURL(){
-		//
-		//
+	public DataSet(){
 		//
 	}
 	
 	// Methods
-	public void linkWithMinio(int id) {
-		 // Get the URL of a random image or same image every time.
+	public void getDataSet(int nbImg) {
+		// Create a JSON object of a dataSet of images.
 		
-		// Depending on the ID, get the according URL. For now it's just a generic string.
-		url = "urlImageTest";
+		// For now it's just a generic string.
+		url = "DataSetTest";
 		
 		this.setUrl(url);
 	}
@@ -32,3 +30,4 @@ public class MinioURL {
 		this.url = url;
 	}
 }
+
