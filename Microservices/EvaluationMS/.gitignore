@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 *.json
+*.png
 
 ### STS ###
 .apt_generated
