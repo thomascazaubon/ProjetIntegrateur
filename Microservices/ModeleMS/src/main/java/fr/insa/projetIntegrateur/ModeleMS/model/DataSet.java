@@ -1,4 +1,4 @@
-package fr.insa.projetIntegrateur.ControllerMS.model;
+package fr.insa.projetIntegrateur.ModeleMS.model;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

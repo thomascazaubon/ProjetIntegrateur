@@ -1,5 +1,4 @@
-package fr.insa.projetIntegrateur.ControllerMS.model;
-
+package fr.insa.projetIntegrateur.ModeleMS.model;
 
 import java.util.ArrayList;
 
@@ -58,3 +57,4 @@ public class Results {
 	}
 	
 }
+
