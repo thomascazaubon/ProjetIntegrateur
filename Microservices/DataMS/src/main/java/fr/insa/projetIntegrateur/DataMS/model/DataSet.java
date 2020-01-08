@@ -1,33 +1,44 @@
 package fr.insa.projetIntegrateur.DataMS.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
-@XmlRootElement(name = "DataSet")
 public class DataSet {
 	// Attributes
-	private String url;
+	private ArrayList<BufferedImage> imgList;
+	private int listSize;
 	
 	// Constructors
-	public DataSet(){
-		//
+	public DataSet(int nbImg) {
+		this.listSize = nbImg;
 	}
 	
-	// Methods
-	public void getDataSet(int nbImg) {
-		// Create a JSON object of a dataSet of images.
+	// Method
+	public void addImagesToDataSet() {
+		int x = this.listSize;
+		while (x >= 1) {
+			// Add image to imgList.
+			
+			x = x - 1;
+		}
 		
-		// For now it's just a generic string.
-		url = "DataSetTest";
-		
-		this.setUrl(url);
 	}
 	
-	// Getters and setters
-	public String getUrl() {
-		return url;
+	// Getters & Setters
+	public ArrayList<BufferedImage> getImgList() {
+		return imgList;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setImgList(ArrayList<BufferedImage> imgList) {
+		this.imgList = imgList;
 	}
+
+	public int getListSize() {
+		return listSize;
+	}
+	public void setListSize(int listSize) {
+		this.listSize = listSize;
+	}
+	
+	
 }
 

@@ -1,5 +1,8 @@
 package fr.insa.projetIntegrateur.ControllerMS.controller;
 
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,40 +17,39 @@ public class ControllerMSRessource {
 	
 	@GetMapping("/train/{nbImg}")
 	public String train(@PathVariable("nbImg") int nbImg){
-		// Result initialized with "failed" but will contain the class of the image given with "id".  
-		String output = "Failed";
+		// Result of the training initialized, will contain the time taken, the algorithm etc.  
+		//TrainResults res; ???
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		// Get the right URL to the right image.
-		DataSet murl = restTemplate.getForObject("http://localhost:8082/data/train/" + nbImg, DataSet.class);
-		String url = murl.getUrl();
-		// Prediction with Python script.
-		Results res = restTemplate.getForObject("http://localhost:8084/evaluation/saveResults", Results.class);
-		output = res.getResult();
+		// Get the right dataset.
+		DataSet dataSet = restTemplate.getForObject("http://localhost:8082/data/train/" + nbImg, DataSet.class);
 		
-		return output;
+		restTemplate.postForObject("http://localhost:8083/data/train/", dataSet, DataSet.class);
+
+		// Train with Python script.
+		//Results res = restTemplate.getForObject("http://localhost:8084/evaluation/saveResults", Results.class);
+		//output = res.getResult();
+		
+		return "Training done with " + nbImg + " images.";
 	}
 	
 	@GetMapping("/pred/{img}")
 	public String getPrediction(@PathVariable("img") int img){
-		// Result initialized with "failed" but will contain the class of the image given with "id".  
-		String output = "Failed";
+		// Result initialized, will contain the class of the images given, the algorithm etc.  
+		Results res;
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		// Creating our classes.
-		//MinioURL murl = new MinioURL();
-		//Prediction pred = new Prediction();
-		
 		// Get the right URL to the right image.
-		Image murl = restTemplate.getForObject("http://localhost:8082/data/prediction/" + img, Image.class);
-		String url = murl.getUrl();
+		BufferedImage image = restTemplate.getForObject("http://localhost:8082/data/prediction/" + img, BufferedImage.class);
 		// Prediction with Python script.
-		Prediction pred = restTemplate.getForObject("http://localhost:8083/prediction/" + url, Prediction.class);
-		output = pred.getResult();
-		
-		return output;
+		res = restTemplate.postForObject("http://localhost:8083/model/predictOne", image, Results.class);
+		// Sent to the evaluation MS
+		restTemplate.postForObject("http://localhost:8084/evaluation/saveResults", res, void.class);
+
+		// Return the results
+		return "[RESULTS] " + res.getAlgorithm() + " " + res.getParameters() + " " + res.getPredicted_classes();
 		
 		/*
 		int i = 0;
