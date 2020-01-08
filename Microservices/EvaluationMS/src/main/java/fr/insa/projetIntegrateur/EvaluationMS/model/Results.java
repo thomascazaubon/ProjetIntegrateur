@@ -8,6 +8,9 @@ public class Results {
 	private ArrayList<String> true_classes;
 	private ArrayList<String> predicted_classes;
 	
+	public Results() {
+	}
+	
 	public Results(String algorithm, String parameters, ArrayList<String> true_classes, ArrayList<String> predicted_classes) {
 		this.algorithm = algorithm;
 		this.parameters = parameters;
@@ -52,6 +55,5 @@ public class Results {
 	public void setPredicted_classes(ArrayList<String> predicted_classes) {
 		this.predicted_classes = predicted_classes;
 	}
-	
 	
 }
