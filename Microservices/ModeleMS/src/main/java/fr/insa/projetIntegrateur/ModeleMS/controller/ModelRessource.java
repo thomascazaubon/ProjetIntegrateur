@@ -17,11 +17,11 @@ public class ModelRessource {
 	/* T R A I N I N G */
 	@PostMapping(value="/train", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public String train(@RequestBody DataSet dataSet) {
-		String status = "Training failed.";
+		String status = "Failed.";
 		// TODO
 		
 		// If everything goes well.
-		status = "Training complete.";
+		status = "Complete.";
 		return status;
 	}
 	

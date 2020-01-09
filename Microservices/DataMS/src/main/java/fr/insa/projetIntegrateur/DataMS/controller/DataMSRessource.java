@@ -2,6 +2,7 @@ package fr.insa.projetIntegrateur.DataMS.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.awt.image.BufferedImage;
 
 
@@ -30,17 +31,26 @@ public class DataMSRessource {
 	}
 	
 	// Data request for PREDICTION (one image)
-	@GetMapping(value="/predict/{img}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/prediction/{img}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public BufferedImage getImage(@PathVariable("img") int img){
 		
 		// For now we get a local file image.
 		BufferedImage image = null;
-		File file = new File("/Users/admin/Desktop/INSA/5A/ProjetIntegrateur/DataForTest/bmp_Image003.bmp");
+		File file = new File("bmp_Image003.bmp");
 		try {
 			image = ImageIO.read(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
+		/*
+		byte[] matrix = null;
+		File file1 = new File("bmp_Image003.bmp");
+		try {
+			matrix = Files.readAllBytes(file1.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
 		return image;
 	}
 	
