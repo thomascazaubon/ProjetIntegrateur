@@ -32,9 +32,9 @@ public class DataMSRessource {
 	
 	// Data request for PREDICTION (one image)
 	@GetMapping(value="/prediction/{img}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public BufferedImage getImage(@PathVariable("img") int img){
+	public DataSet getImage(@PathVariable("img") int nbImg){
 		
-		// For now we get a local file image.
+		/* For now we get a local file image.
 		BufferedImage image = null;
 		File file = new File("bmp_Image003.bmp");
 		try {
@@ -42,39 +42,12 @@ public class DataMSRessource {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		/*
-		byte[] matrix = null;
-		File file1 = new File("bmp_Image003.bmp");
-		try {
-			matrix = Files.readAllBytes(file1.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		*/
-		return image;
-	}
+		
+		DataSet dataSet = new DataSet(nbImg);
+		// Put the right parameters in the function below !
+		dataSet.addImagesToDataSet();
+		return dataSet;
+		}
 	
-	/*
-	@GetMapping("images")
-	public String nb_images(){
-		return "Il y a 36 457 900 images en ligne !";
-	}
-	// @PathVariable est remplacé par @RequestBody si le paramètre est un objet.
-	@GetMapping(value = "newImage/{id}")
-	public String newImage(@PathVariable int id){
-		Image image = new Image(id);
-		return "L'image n°" + image.getId() + " a bien été créée.";
-	}
-	@GetMapping(value = "findImage/{id}")
-	public String findImage(@PathVariable int id){
-		String reponse = "Désolé.e.s ... \nVotre image n'est pas ici, il n'y a pas encore de mémoire.";	
-		return reponse;
-	}
-	// Retour XML :
-	@GetMapping(value = "imagesXML/{id}", produces = MediaType.APPLICATION_XML_VALUE)
-	public Image infoImageXML(@PathVariable int id){
-		Image image = new Image(id);
-		return image;
-	}
-	*/
 }
