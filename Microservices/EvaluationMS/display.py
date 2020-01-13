@@ -34,11 +34,19 @@ def main():
 
     # Creation of the plot
     cm = confusion_matrix(data["true_classes"], data["predicted_classes"])
+    # Get true negatives, false positives, false negatives and true positives
+    tn, fp, fn, tp = cm.ravel()
+    # Compute precision, sensibility to Recyclable and sensibility to Organic
+    precision = (tp + tn) / (tn + fp + fn + fp)
+    sensibilityR = tp / (tp+fn)
+    sensibilityO = tn / (tn+fp)
+
+    plt.figure(figsize = (16,9))
     df_cm = pd.DataFrame(cm, columns=np.unique(data["true_classes"]), index = np.unique(data["true_classes"]))
     df_cm.index.name = 'Valeur réelle'
     df_cm.columns.name = 'Valeur prédite'
-    plt.figure(figsize = (16,9))
-    plt.title(data['algorithm'] + " " + data['parameters'])
+    # plt.suptitle(data['algorithm'] + " " + data['parameters'], size=24)
+    plt.title(f"precision = {precision}\n O sensibility = {sensibilityO}\n R sensibility = {sensibilityR}", size=16)
     sn.heatmap(df_cm, cmap="Blues", annot=True)
     # Save the plot as a png file
     plt.savefig(png)
