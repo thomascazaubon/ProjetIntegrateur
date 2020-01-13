@@ -6,6 +6,7 @@
 /Microservices/EvaluationMS/.classpath
 /Microservices/ModeleMS/.classpath
 /Microservices/UserInterfaceMS/.classpath
+*/.DS_Store
 
 
 
