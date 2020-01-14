@@ -29,6 +29,19 @@ public class ControllerMSRessource {
 		return "Training status : " + status + ". With " + nbImg + " images.";
 	}
 	
+	@GetMapping("/testhomas/{nbImg}")
+	public String test(@PathVariable("nbImg") int nbImg){
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		// Get the right dataset.
+		restTemplate.getForObject("http://192.168.0.9:8082/data/prediction/" + nbImg, String.class);
+		
+		//String status = restTemplate.postForObject("http://localhost:8083/model/train/", dataSet, String.class);
+		
+		return "Ok boomer.";
+	}
+	
 	@GetMapping(value = "/prediction/{img}", produces = MediaType.IMAGE_PNG_VALUE)
 	public @ResponseBody byte[] getPrediction(@PathVariable("img") int img){
 		// Result initialized, will contain the class of the images given, the algorithm etc.  
