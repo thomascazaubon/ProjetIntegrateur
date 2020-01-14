@@ -16,9 +16,10 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Get all json files in the current directory
-    files = [f for f in listdir(".") if f.endswith(".json")]
+    files = ["./results/"+f for f in listdir("./results/") if f.endswith(".json")]
+
     # Get the recenter json file of the current repository
-    last = sorted(files, key=path.getmtime)[-1]
+    last = path.basename(sorted(files, key=path.getmtime)[-1])
 
     #Arguments : -file file
     parser.add_argument("-f", "--file", dest="file", default=last, type=str, help="Results file to read")
@@ -26,7 +27,7 @@ def main():
     file = args.file
 
     # Read the json file
-    with open(file) as json_file:
+    with open("./results/" + file) as json_file:
         data = json.load(json_file)
 
     # Filename of the png file
@@ -49,7 +50,7 @@ def main():
     plt.title(f"precision = {precision}\n O sensibility = {sensibilityO}\n R sensibility = {sensibilityR}", size=16)
     sn.heatmap(df_cm, cmap="Blues", annot=True)
     # Save the plot as a png file
-    plt.savefig(png)
+    plt.savefig("./charts/" + png)
     plt.close()
 
     # Return the png filename

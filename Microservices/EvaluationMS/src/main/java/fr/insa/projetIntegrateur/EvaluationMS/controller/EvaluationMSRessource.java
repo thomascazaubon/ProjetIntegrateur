@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,15 @@ public class EvaluationMSRessource {
 	
 	@PostMapping(value="/saveResults", consumes=MediaType.APPLICATION_JSON_VALUE, produces = MediaType.IMAGE_PNG_VALUE)
 	public @ResponseBody byte[] saveResults(@RequestBody Results resultsToSave) {
+		/* 
+		 * Input : Results instance as JSON
+		 * 
+		 * Saves the results as json files in the results repository.
+		 * Create a png analyses with a confusion matrix in the charts repository. 
+		 * 
+		 * Return : png with confusion matrix
+		 */
+		
 		// Debug
 		resultsToSave.print();
 		
@@ -39,11 +51,17 @@ public class EvaluationMSRessource {
 			e.printStackTrace();
 		}
 		
-		// Write the json data in a file
-		String fileName = resultsToSave.getAlgorithm()+"-"+java.time.Clock.systemUTC().instant().toString().replace(".", "--").replace(":", "-")+".json";
+		// Write the json data in a file 
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+	    LocalDateTime now = LocalDateTime.now(); 
+		String fileName = resultsToSave.getAlgorithm()+ "-";
+		for (Map.Entry<String, Integer> e : resultsToSave.getParameters().entrySet()) {
+			fileName += e.getKey() + "_" + e.getValue() + "-";
+	    }
+		fileName += dtf.format(now).replace("/", "_").replace(":", "_").replace(" ", "-")+".json";
 		FileWriter fileToSave = null;
 		try {
-			fileToSave = new FileWriter(fileName);
+			fileToSave = new FileWriter("./results/" + fileName);
 			fileToSave.append(json);
 			fileToSave.flush();
 			fileToSave.close();
@@ -53,7 +71,7 @@ public class EvaluationMSRessource {
 		
 		// Generate and get the png (filename) corresponding to the results
 		String pngName = getPngName(fileName);
-	    File image = new File(pngName);
+	    File image = new File("./charts/" + pngName);
 		byte[] pixels = null;
 		try {
 			pixels = Files.readAllBytes(image.toPath());
@@ -64,7 +82,7 @@ public class EvaluationMSRessource {
 		return pixels;
 	}
 	
-	private String getPngName(String resultsName) {
+	private String getPngName(String resultsPath) {
 		// Call the Python script that generates png
 		// Return the filename of the generated png
 		
@@ -72,10 +90,10 @@ public class EvaluationMSRessource {
 		try {	
 			// Execute the Python script
 			String command = null;
-			if (resultsName == null) {
+			if (resultsPath == null) {
 				command = "python display.py";
 			} else {
-				command = "python display.py -f " + resultsName;
+				command = "python display.py -f " + resultsPath;
 			}
 			System.out.println("command = " + command);
 			Process p = Runtime.getRuntime().exec(command);
@@ -113,7 +131,7 @@ public class EvaluationMSRessource {
 		String pngName = getPngName(resultsName);
 		
 		// Read the png file
-	    File image = new File(pngName);
+	    File image = new File("./charts/" + pngName);
 		byte[] pixels = null;
 		try {
 			// Transform the png in bytes so it can be send to another service
