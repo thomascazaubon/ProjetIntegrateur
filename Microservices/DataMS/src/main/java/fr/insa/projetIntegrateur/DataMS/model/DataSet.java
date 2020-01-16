@@ -34,13 +34,21 @@ public class DataSet {
 		Random r = new Random();
 		try {
 			// Connection to minio server
-			MinioClient minioClient = new MinioClient("http://192.168.37.142", 9000, "minioadmin", "minioadmin");
+			System.out.println("---------------------------------------------\n"
+				     		 + "------------------- 1 -----------------------\n"
+				     		 + "---------------------------------------------\n");
+			
+			MinioClient minioClient = new MinioClient("http://192.168.0.7", 9000, "minioadmin", "minioadmin");
+			
+			System.out.println("---------------------------------------------\n"
+							 + "------------------- 2 -----------------------\n"
+							 + "---------------------------------------------\n");
 			
 			//InputStream stream = minioClient.getObject(args[0],args[0]);
 			Iterable<Result<Item>> organics = minioClient.listObjects("dataset1","O");
 			Iterable<Result<Item>> recyclables = minioClient.listObjects("dataset1","R"); 	
 			int organicsLength = 0;
-			int recyclablesLength = 0;
+			int recyclablesLength = 0; 
 			for (Object i : organics){organicsLength++;}
 			for (Object i : recyclables){recyclablesLength++;}
 			
@@ -63,17 +71,13 @@ public class DataSet {
 		} catch (MinioException e) {
 			System.out.println("Error occurred: " + e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error occurred: " + e);
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error occurred: " + e);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error occurred: " + e);
 		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error occurred: " + e);
 		}
 		
 	}

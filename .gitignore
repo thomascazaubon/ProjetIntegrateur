@@ -8,6 +8,11 @@
 /Microservices/UserInterfaceMS/.classpath
 */.DS_Store
 
+/Microservices/DataMS/.DS_Store
+/Microservices/ModeleMS/.DS_Store
+
+
+
 
 
 # Byte-compiled / optimized / DLL files

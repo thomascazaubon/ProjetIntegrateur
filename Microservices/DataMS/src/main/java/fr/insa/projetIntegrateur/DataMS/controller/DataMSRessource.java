@@ -47,7 +47,11 @@ public class DataMSRessource {
 		DataSet dataSet = new DataSet(nbImg);
 		// Put the right parameters in the function below !
 		dataSet.addImagesToDataSet();
+		System.out.println("---------------------------------------------\n"
+					     + "----------------- ME OUI C KLER -------------\n"
+					     + "---------------------------------------------\n");
 		return dataSet;
 		}
+	
 	
 }

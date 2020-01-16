@@ -23,8 +23,8 @@ public class ModelRessource {
 	@PostMapping(value="/train", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public String train(@RequestBody DataSet dataSet) {
 		String status = "Failed.";
-		// TODO
-		//result = model.py(train, dataSet);
+		// 
+		callModel("train", "nomDossierTrain");
 		// If everything goes well.
 		status = "Complete.";
 		return status;
@@ -32,63 +32,63 @@ public class ModelRessource {
 	
 	/* P R E D I C T I O N */
 	// PREDICT on one single image
-	@PostMapping(value="/predictOne", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public Results predictOne(@RequestBody DataSet oneImage) {
+	//@GetMapping(value="/predictOne", consumes=MediaType.APPLICATION_JSON_VALUE)
+	//public Results predictOne(@RequestBody DataSet oneImage) {
+	@GetMapping(value="/predictOne")
+	public Results predictOne() {
 		Results res = new Results();
-		// TODO
-		//String output = callModel("predictOne", oneImage);
+		System.out.println("1");
+		// Construire le dossier 
+		// String nomDossier;
 		
-		//res.setAlgorithm(output);
-		
+		String output = callModel("predictOne", "dataSet");
+		System.out.println("2");
+
+		res.setAlgorithm(output);
 		return res;
 	}
 	// PREDICT on DataSet
 	@PostMapping(value="/predict", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public Results predict(@RequestBody DataSet dataSet) {
 		Results res = new Results();
-		// TODO
-		//String output = callModel("predictAll", dataSet);
 		
-		//res.setAlgorithm(output);
+		// Construire le dossier, mettre l'image dedans
+		//String nomDossier;
 		
+		String output = callModel("predictAll", "dataSet");
+		
+		res.setAlgorithm(output);
 		return res;
 	}
 	
 	
-	// PREDICT :    << T E S T >>
-	@GetMapping("/predictTest")
-	public String predictTest() {
-		// TODO
-		String output = callModel();
-		
-		//res.setAlgorithm(output);
-		
-		return output;
-	}
-	
-	//private String callModel(String action, DataSet dataSet) {
-	private String callModel() {
-		
+	private String callModel(String action, String nomDossier) {
+		System.out.println("In callModel");
+
 		String returned = null;
 		try {	
 			// Execute the Python script
 			String command = null;
-			/*
+		
 			if (action == "train") {
-				command = "python model.py";
+				command = "python projet_test/model.py -a train -i " + nomDossier;
 			} else if (action == "predictOne") {
-				command = "python model.py -f 1 " + dataSet;
+				command = "python projet_test/model.py -a predictOne -i " + nomDossier;
 			}
 			else {
-				command = "python model.py -f 2 " + dataSet;
+				command = "python projet_test/model.py -a predictAll -i " + nomDossier;
 			}
-			*/
-			// T E S T
-			command = "python test.py";
-			
-			System.out.println("command = " + command);
-			Process p = Runtime.getRuntime().exec(command);
-		
+						
+			String[] com = {
+	                "/bin/bash",
+	                "-c",
+	                "source /Users/admin/anaconda/bin/activate envFastai && " + command
+	        };
+	        
+			System.out.println("command = " + com);
+			Process p = Runtime.getRuntime().exec(com);
+			System.out.println("Process started.");
+
 			// Wait the Python script to end
 			try {
 				p.waitFor();
@@ -111,9 +111,15 @@ public class ModelRessource {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("CallModel ended.");
+
 		
-		// Return the filename of the generated png
 		return returned;
 	}
+	
+	// model.py
+	// dossierDATATRAIN
+	// dossierPKL
+	
 	
 }
