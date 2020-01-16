@@ -31,8 +31,8 @@ public class DataMSRessource {
 	}
 	
 	// Data request for PREDICTION (one image)
-	@GetMapping(value="/prediction/{img}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public DataSet getImage(@PathVariable("img") int nbImg){
+	@GetMapping(value="/prediction/{img}", produces=MediaType.TEXT_PLAIN_VALUE)
+	public String getImage(@PathVariable("img") int nbImg){
 		
 		/* For now we get a local file image.
 		BufferedImage image = null;
@@ -47,11 +47,9 @@ public class DataMSRessource {
 		DataSet dataSet = new DataSet(nbImg);
 		// Put the right parameters in the function below !
 		dataSet.addImagesToDataSet();
-		System.out.println("---------------------------------------------\n"
-					     + "----------------- ME OUI C KLER -------------\n"
-					     + "---------------------------------------------\n");
-		return dataSet;
-		}
+		
+		return("Zouper");
+	}
 	
 	
 }
