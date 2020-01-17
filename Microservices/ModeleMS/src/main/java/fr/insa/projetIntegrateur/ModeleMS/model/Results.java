@@ -1,25 +1,26 @@
 package fr.insa.projetIntegrateur.ModeleMS.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Results {
 	private String algorithm;
-	private String parameters;
+	private HashMap<String, Integer> parameters; 
 	private ArrayList<String> true_classes;
 	private ArrayList<String> predicted_classes;
 	
 	public Results() {
 	}
 	
-	public Results(String algorithm, String parameters, ArrayList<String> true_classes, ArrayList<String> predicted_classes) {
-		this.algorithm = algorithm;
-		this.parameters = parameters;
-		this.true_classes = true_classes;
-		this.predicted_classes = predicted_classes;
+	public Results(String algorithm, HashMap<String, Integer> parameters, ArrayList<String> true_classes, ArrayList<String> predicted_classes) {
+		this.algorithm = algorithm; 
+		this.parameters = parameters; 
+		this.true_classes = true_classes; 
+		this.predicted_classes = predicted_classes; 
 	}
 	
 	public void print() {
-		System.out.println("[RESULTS] " + this.algorithm + " " + this.parameters);
+		System.out.println("[RESULTS] " + this.algorithm + " - " + this.parameters.toString().replace("{", "").replace("}", ""));
 		System.out.println("\t" + this.true_classes);
 		System.out.println("\t" + this.predicted_classes);
 	}
@@ -32,11 +33,11 @@ public class Results {
 		this.algorithm = algorithm;
 	}
 
-	public String getParameters() {
+	public HashMap<String, Integer> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(String parameters) {
+	public void setParameters(HashMap<String, Integer> parameters) {
 		this.parameters = parameters;
 	}
 
@@ -55,6 +56,4 @@ public class Results {
 	public void setPredicted_classes(ArrayList<String> predicted_classes) {
 		this.predicted_classes = predicted_classes;
 	}
-	
 }
-

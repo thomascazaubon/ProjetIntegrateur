@@ -28,27 +28,32 @@ def main():
 
     # Read the json file
     with open("./results/" + file) as json_file:
-        data = json.load(json_file)
-
+        data = json.load(json_file)        
+        
     # Filename of the png file
     png = path.splitext(path.basename(file))[0]+".png"
-
-    # Creation of the plot
-    cm = confusion_matrix(data["true_classes"], data["predicted_classes"])
-    # Get true negatives, false positives, false negatives and true positives
-    tn, fp, fn, tp = cm.ravel()
-    # Compute precision, sensibility to Recyclable and sensibility to Organic
-    precision = (tp + tn) / (tn + fp + fn + fp)
-    sensibilityR = tp / (tp+fn)
-    sensibilityO = tn / (tn+fp)
-
+        
     plt.figure(figsize = (16,9))
-    df_cm = pd.DataFrame(cm, columns=np.unique(data["true_classes"]), index = np.unique(data["true_classes"]))
-    df_cm.index.name = 'Valeur réelle'
-    df_cm.columns.name = 'Valeur prédite'
-    # plt.suptitle(data['algorithm'] + " " + data['parameters'], size=24)
-    plt.title(f"precision = {precision}\n O sensibility = {sensibilityO}\n R sensibility = {sensibilityR}", size=16)
-    sn.heatmap(df_cm, cmap="Blues", annot=True)
+    plt.title("Precision, sensibilite toussa")
+    
+    if len(data["true_classes"]) > 1: 
+        
+        # Creation of the plot
+        cm = confusion_matrix(data["true_classes"], data["predicted_classes"])
+        # Get true negatives, false positives, false negatives and true positives
+        tn, fp, fn, tp = cm.ravel()
+        # Compute precision, sensibility to Recyclable and sensibility to Organic
+        precision = (tp + tn) / (tn + fp + fn + fp)
+        sensibilityR = tp / (tp+fn)
+        sensibilityO = tn / (tn+fp)
+
+        df_cm = pd.DataFrame(cm, columns=np.unique(data["true_classes"]), index = np.unique(data["true_classes"]))
+        df_cm.index.name = 'Valeur reelle'
+        df_cm.columns.name = 'Valeur predite'
+        # plt.suptitle(data['algorithm'] + " " + data['parameters'], size=24)
+        #plt.title(f"precision = {precision}\n O sensibility = {sensibilityO}\n R sensibility = {sensibilityR}", size=16)
+        sn.heatmap(df_cm, cmap="Blues", annot=True)
+        
     # Save the plot as a png file
     plt.savefig("./charts/" + png)
     plt.close()

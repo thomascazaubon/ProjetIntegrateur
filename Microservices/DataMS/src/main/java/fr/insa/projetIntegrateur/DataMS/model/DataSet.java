@@ -23,7 +23,6 @@ import io.minio.errors.InvalidBucketNameException;
 import io.minio.errors.InvalidEndpointException;
 import io.minio.errors.InvalidPortException;
 import io.minio.errors.InvalidResponseException;
-import io.minio.errors.MinioException;
 import io.minio.errors.NoResponseException;
 import io.minio.messages.Item;
 
@@ -73,7 +72,7 @@ public class DataSet {
 					try {
 						stream = minioClient.getObject("dataset1", fileName);
 						BufferedImage image = ImageIO.read(stream);
-						File targetFile = new File(fileName);
+						File targetFile = new File("./images/"+fileName);
 			    		ImageIO.write(image, "jpg", targetFile);
 			    		System.out.print((i + 1) + " ");
 			    		success = true;

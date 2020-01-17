@@ -22,14 +22,14 @@ public class ControllerMSRessource {
 		RestTemplate restTemplate = new RestTemplate();
 		
 		// Get the right dataset.
-		DataSet dataSet = restTemplate.getForObject("http://localhost:8082/data/train/" + nbImg, DataSet.class);
+		restTemplate.getForObject("http://192.168.0.9:8082/data/train/" + nbImg, Void.class);
 		
-		String status = restTemplate.postForObject("http://localhost:8083/model/train/", dataSet, String.class);
+		String status = restTemplate.getForObject("http://192.168.0.9:8083/model/train/", String.class);
 		
 		return "Training status : " + status + ". With " + nbImg + " images.";
 	}
 	
-	@GetMapping("/testhomas/{nbImg}")
+	@GetMapping("/testDataMS/{nbImg}")
 	public String test(@PathVariable("nbImg") int nbImg){
 		
 		RestTemplate restTemplate = new RestTemplate();
@@ -45,21 +45,18 @@ public class ControllerMSRessource {
 	@GetMapping(value = "/prediction/{img}", produces = MediaType.IMAGE_PNG_VALUE)
 	public @ResponseBody byte[] getPrediction(@PathVariable("img") int img){
 		// Result initialized, will contain the class of the images given, the algorithm etc.  
-		Results res;
 		byte[] matrix;
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		// Get the right URL to the right image.
-		BufferedImage image = restTemplate.getForObject("http://localhost:8082/data/prediction/" + img, BufferedImage.class);
-		// Prediction with Python script.
+		// Get the image
+		restTemplate.getForObject("http://192.168.0.9:8088/data/prediction/" + img, Void.class);
 		
-		res = restTemplate.postForObject("http://localhost:8083/model/predictOne", image, Results.class);
-		if (res == null) {
-			System.out.println("Result is null.");
-		}
+		// Prediction with Python script.
+		Results res = restTemplate.getForObject("http://192.168.0.9:8083/model/predictOne", Results.class);
+		
 		// Send to the evaluation MS
-		matrix = restTemplate.postForObject("http://localhost:8084/evaluation/saveResults", res, byte[].class);
+		matrix = restTemplate.postForObject("http://192.168.0.9:8084/evaluation/saveResults", res, byte[].class);
 
 		// Return the results
 		return matrix;

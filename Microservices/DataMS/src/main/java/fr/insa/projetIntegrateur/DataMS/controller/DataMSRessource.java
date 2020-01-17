@@ -23,32 +23,22 @@ public class DataMSRessource {
 	
 	// Data request for TRAINING (or prediction ?)
 	@GetMapping(value = "/train/{nbImg}", produces=MediaType.APPLICATION_JSON_VALUE) 
-	public DataSet getDataSet(@PathVariable("nbImg") int nbImg){
+	public void getDataSet(@PathVariable("nbImg") int nbImg){
 		DataSet dataSet = new DataSet(nbImg);
 		// Put the right parameters in the function below !
 		dataSet.addImagesToDataSet();
-		return dataSet;
+		
+		System.out.println("Zouper train");
 	}
 	
 	// Data request for PREDICTION (one image)
 	@GetMapping(value="/prediction/{img}", produces=MediaType.TEXT_PLAIN_VALUE)
-	public String getImage(@PathVariable("img") int nbImg){
-		
-		/* For now we get a local file image.
-		BufferedImage image = null;
-		File file = new File("bmp_Image003.bmp");
-		try {
-			image = ImageIO.read(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-		*/
-		
+	public void getImage(@PathVariable("img") int nbImg){
 		DataSet dataSet = new DataSet(nbImg);
 		// Put the right parameters in the function below !
 		dataSet.addImagesToDataSet();
 		
-		return("Zouper");
+		System.out.println("Zouper predict");
 	}
 	
 	

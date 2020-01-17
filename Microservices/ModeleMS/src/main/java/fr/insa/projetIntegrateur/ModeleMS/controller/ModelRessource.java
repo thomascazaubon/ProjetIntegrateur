@@ -4,6 +4,8 @@ package fr.insa.projetIntegrateur.ModeleMS.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,61 +34,70 @@ public class ModelRessource {
 	
 	/* P R E D I C T I O N */
 	// PREDICT on one single image
-	//@GetMapping(value="/predictOne", consumes=MediaType.APPLICATION_JSON_VALUE)
-	//public Results predictOne(@RequestBody DataSet oneImage) {
-	@GetMapping(value="/predictOne")
+	@GetMapping(value="/predictOne", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Results predictOne() {
 		Results res = new Results();
-		System.out.println("1");
 		// Construire le dossier 
 		// String nomDossier;
 		
-		String output = callModel("predictOne", "dataSet");
-		System.out.println("2");
-
-		res.setAlgorithm(output);
+		ArrayList<String> output = callModel("predictOne", "dataSet");
+		
+		res.setAlgorithm(output.get(0));
+		
+		res.setParameters(new HashMap<String, Integer>());
+		res.getParameters().put(output.get(1).split(" ")[0], Integer.parseInt(output.get(1).split(" ")[1]));
+		
+		res.setTrue_classes(new ArrayList<String>());
+		res.getTrue_classes().add(output.get(2));
+		res.setPredicted_classes(new ArrayList<String>());
+		res.getPredicted_classes().add(output.get(3));
+		res.print();
+		
 		return res;
 	}
 	// PREDICT on DataSet
-	@PostMapping(value="/predict", consumes=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/predictAll")
 	public Results predict(@RequestBody DataSet dataSet) {
 		Results res = new Results();
 		
 		// Construire le dossier, mettre l'image dedans
 		//String nomDossier;
 		
-		String output = callModel("predictAll", "dataSet");
+		ArrayList<String> output = callModel("predictAll", "dataSet");
 		
-		res.setAlgorithm(output);
+		res.setAlgorithm(output.get(0));
+		//res.setParameters(output.get(1));
+		res.getTrue_classes().add(output.get(2));
+		res.getPredicted_classes().add(output.get(3));		
 		return res;
 	}
 	
 	
-	private String callModel(String action, String nomDossier) {
+	private ArrayList<String> callModel(String action, String nomDossier) {
 		System.out.println("In callModel");
 
-		String returned = null;
+		ArrayList<String> returned = new ArrayList<String>();
 		try {	
 			// Execute the Python script
 			String command = null;
 		
 			if (action == "train") {
-				command = "python projet_test/model.py -a train -i " + nomDossier;
+				command = "python3 projet_test/model.py -a train";
 			} else if (action == "predictOne") {
-				command = "python projet_test/model.py -a predictOne -i " + nomDossier;
+				command = "python3 projet_test/model.py -a predictOne";
 			}
 			else {
-				command = "python projet_test/model.py -a predictAll -i " + nomDossier;
+				command = "python3 projet_test/model.py -a predictAll";
 			}
-						
+			/*		
 			String[] com = {
 	                "/bin/bash",
 	                "-c",
 	                "source /Users/admin/anaconda/bin/activate envFastai && " + command
 	        };
-	        
-			System.out.println("command = " + com);
-			Process p = Runtime.getRuntime().exec(com);
+	        */
+			System.out.println("command = " + command);
+			Process p = Runtime.getRuntime().exec(command);
 			System.out.println("Process started.");
 
 			// Wait the Python script to end
@@ -106,7 +117,11 @@ public class ModelRessource {
 			
 			// Read Python output
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			returned = in.readLine();
+			String line;
+			while((line = in.readLine()) != null) {
+				System.out.println(line);
+				returned.add(line);
+			}
 			System.out.println("Retour = " + returned);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -115,11 +130,6 @@ public class ModelRessource {
 
 		
 		return returned;
-	}
-	
-	// model.py
-	// dossierDATATRAIN
-	// dossierPKL
-	
-	
+	}	
 }
+

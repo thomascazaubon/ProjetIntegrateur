@@ -91,10 +91,17 @@ public class EvaluationMSRessource {
 			// Execute the Python script
 			String command = null;
 			if (resultsPath == null) {
-				command = "python display.py";
+				command = "python3 display.py";
 			} else {
-				command = "python display.py -f " + resultsPath;
+				command = "python3 display.py -f " + resultsPath;
 			}
+			/*
+			String[] com = {
+	                "/bin/bash",
+	                "-c",
+	                "source /Users/admin/anaconda/bin/activate envFastai && " + command
+	        };
+			*/
 			System.out.println("command = " + command);
 			Process p = Runtime.getRuntime().exec(command);
 		
