@@ -1,7 +1,5 @@
 package fr.insa.projetIntegrateur.ControllerMS.controller;
 
-import java.awt.image.BufferedImage;
-
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +20,7 @@ public class ControllerMSRessource {
 		RestTemplate restTemplate = new RestTemplate();
 		
 		// Get the right dataset.
-		restTemplate.getForObject("http://192.168.0.9:8082/data/train/" + nbImg, Void.class);
+		restTemplate.getForObject("http://192.168.0.9:8088/data/" + nbImg, Void.class);
 		
 		String status = restTemplate.getForObject("http://192.168.0.9:8083/model/train/", String.class);
 		
@@ -35,7 +33,7 @@ public class ControllerMSRessource {
 		RestTemplate restTemplate = new RestTemplate();
 		
 		// Get the right dataset.
-		restTemplate.getForObject("http://192.168.0.9:8082/data/prediction/" + nbImg, String.class);
+		restTemplate.getForObject("http://192.168.0.9:8088/data/" + nbImg, Void.class);
 		
 		//String status = restTemplate.postForObject("http://localhost:8083/model/train/", dataSet, String.class);
 		
@@ -48,10 +46,10 @@ public class ControllerMSRessource {
 		byte[] matrix;
 		
 		RestTemplate restTemplate = new RestTemplate();
-		
+
 		// Get the image
-		restTemplate.getForObject("http://192.168.0.9:8088/data/prediction/" + img, Void.class);
-		
+		restTemplate.getForObject("http://192.168.0.9:8088/data/" + img, Void.class);
+
 		// Prediction with Python script.
 		Results res = restTemplate.getForObject("http://192.168.0.9:8083/model/predictOne", Results.class);
 		
